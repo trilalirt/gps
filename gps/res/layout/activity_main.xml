@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+     >
+
+   
+           
+    
+    <fragment
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        class="com.google.android.gms.maps.MapFragment" >
+    
+         
+       
+ 
+ 		
+         
+         
+         <RelativeLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dip"
+        android:orientation="horizontal" >
+        
+    
+     <com.google.ads.AdView
+     android:id="@+id/adView"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:layout_alignParentTop="true"
+     ads:adSize="BANNER"
+     ads:adUnitId="a15269970578fef"
+     ads:loadAdsOnCreate="true"
+     android:gravity="center" 
+     android:layout_centerHorizontal="true"
+     
+     >
+
+</com.google.ads.AdView> 
+         
+
+               <Button android:id="@+id/sh" 
+             android:layout_width="fill_parent" 
+             android:layout_height="wrap_content" 
+             android:layout_alignParentTop="false" 
+             android:layout_centerHorizontal="true" 
+             android:text="Share" 
+             android:textStyle="normal|bold" 
+             android:textSize="20dp"
+              android:layout_below="@+id/adView"
+             
+               />
+ 		 
+ 		  <TextView
+ 		      android:id="@+id/TextView03"
+ 		      android:layout_width="wrap_content"
+ 		      android:layout_height="wrap_content"
+ 		      android:layout_alignParentBottom="true"
+ 		      android:layout_alignParentLeft="true"
+ 		      android:layout_marginLeft="10dip"
+ 		      android:layout_marginBottom="30dip"
+ 		      android:layout_marginRight="5dip"
+ 		      android:text="Longitute: "
+ 		      android:textColor="#424242"
+ 		      android:textSize="20dip" />
+
+        <TextView
+            android:id="@+id/TextView04"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@+id/TextView03"
+            android:layout_marginBottom="30dip"
+            android:text="unknown"
+            android:textColor="#424242"
+            android:textSize="20dip" />
+
+        <TextView
+            android:id="@+id/TextView01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/TextView03"
+            android:layout_alignLeft="@+id/TextView03"
+            android:layout_marginBottom="3dip"
+            android:text="Latitude: "
+            android:textColor="#424242"
+            android:textSize="20dip" />
+
+        <TextView
+            android:id="@+id/TextView02"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/TextView01"
+            android:layout_alignBottom="@+id/TextView01"
+            android:layout_toRightOf="@+id/TextView01"
+            android:layout_marginBottom="3dip"
+            android:text="unknown"
+            android:textColor="#424242"
+            android:textSize="20dip" />
+
+    </RelativeLayout>
+
+  
+    
+  
+  </fragment> 
+  
+    
+
+</RelativeLayout> 
