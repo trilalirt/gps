@@ -44,7 +44,10 @@ public class MainActivity extends Activity implements LocationListener{
   private GoogleMap map;
   private LatLng mylocation;
   private Marker mylocationmarker; 
+  private Marker customlocationmarker;
   private Timer myTimer;
+  private String sharetext;
+  private LatLng pointt;
 
   
 /** Called when the activity is first created. */
@@ -78,6 +81,10 @@ public class MainActivity extends Activity implements LocationListener{
          
         mylocation = new LatLng(latitude, longitude);
         mylocationmarker = map.addMarker(new MarkerOptions().position(mylocation).title("You are here!"));
+//        
+//        customlocationmarker = map.addMarker(new MarkerOptions()
+//		.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+//		.position(mylocation));
         
         Log.i("test", "Lat and Long  " + latitude + " " + longitude);
         
@@ -100,6 +107,21 @@ public class MainActivity extends Activity implements LocationListener{
     Button getButton = (Button)findViewById(R.id.sh);
     getButton.setOnClickListener(ShareListener);
    //share
+    
+    //find me
+    Button findMeButton = (Button) findViewById(R.id.location);
+    findMeButton.setOnClickListener(FindMeListener);
+    //find me
+    
+    //map listener
+    map.setOnMapClickListener(mapClickListener);
+    //map listener
+    
+    //marker listener    
+    
+    	map.setOnMarkerClickListener(blueMarkerListener);
+    
+    //marker listener
     
     myTimer = new Timer();
     myTimer.scheduleAtFixedRate(gps , 0, 600000); 
@@ -129,7 +151,11 @@ public class MainActivity extends Activity implements LocationListener{
     
     mylocation = new LatLng(latitude, longitude);
     mylocationmarker.setPosition(mylocation);
+    
+    if (customlocationmarker == null)
+    {
     map.moveCamera(CameraUpdateFactory.newLatLngZoom(mylocation, 17));
+    }
     
   }
 
@@ -202,11 +228,76 @@ private OnClickListener ShareListener = new OnClickListener()
            
 		   Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
            emailIntent.setType("text/plain");
-           emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "I'm at this latitude " + strlatitude + " and this longitute " + strlongitute + " and this is link to the map: http://maps.google.com.au/maps?ll=" + strlatitude + "," + strlongitute);
+           if (customlocationmarker == null)
+           {
+        	   sharetext = "I'm at this latitude " + strlatitude + " and this longitute " + strlongitute + " and this is link to the map: http://maps.google.com.au/maps?ll=" + strlatitude + "," + strlongitute;
+           }
+           else
+           {
+        	   sharetext = "I want to share this location with you " + "http://maps.google.com.au/maps?ll=" +  pointt.latitude + "," + pointt.longitude;
+           }
+           
+        	   emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, sharetext);
            //emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, getResources().getString(R.string.recommendation_body));
            startActivity(emailIntent);
 			
 		}  
 	};
  
+	private OnClickListener FindMeListener = new OnClickListener()
+	{
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			//map.clear();
+			if (customlocationmarker != null)
+			{
+				customlocationmarker.remove();
+				customlocationmarker = null;
+			}
+			mylocation = new LatLng(latitude, longitude);
+		    mylocationmarker.setPosition(mylocation);
+		    //map.moveCamera(CameraUpdateFactory.newLatLngZoom(mylocation, 17));
+		    map.animateCamera(CameraUpdateFactory.newLatLngZoom(mylocation, 17), 1000, null);
+			
+		}  
+	};
+	
+	private GoogleMap.OnMapClickListener mapClickListener = new GoogleMap.OnMapClickListener()
+	{
+		@Override
+        public void onMapClick(LatLng point) {
+		//map.clear();
+			if (customlocationmarker != null)
+			{
+		customlocationmarker.remove();
+			}
+		customlocationmarker = map.addMarker(new MarkerOptions()
+		.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+		.position(point));
+		
+		
+		customlocationmarker.setPosition(point);
+		pointt = point;
+			
+		}
+	
+	};
+	
+	private GoogleMap.OnMarkerClickListener blueMarkerListener = new GoogleMap.OnMarkerClickListener()
+	{
+
+		@Override
+		public boolean onMarkerClick(Marker arg0) {
+			// TODO Auto-generated method stub
+			if (customlocationmarker != null)
+		    {
+			customlocationmarker.remove();
+		    }
+			return false;
+		}
+		
+		
+	};
+	
 } 
