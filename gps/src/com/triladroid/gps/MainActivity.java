@@ -48,6 +48,7 @@ public class MainActivity extends Activity implements LocationListener{
   private Timer myTimer;
   private String sharetext;
   private LatLng pointt;
+  private Location gpslocation;
 
   
 /** Called when the activity is first created. */
@@ -65,8 +66,6 @@ public class MainActivity extends Activity implements LocationListener{
     
     map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
     
-    
-    
     if(gps.canGetLocation()){
     	//Toast.makeText(getApplicationContext(),"can get location",Toast.LENGTH_LONG).show();
         latitude = gps.getLatitude();
@@ -74,29 +73,27 @@ public class MainActivity extends Activity implements LocationListener{
         double speed = gps.getSpeed();
         double altitude = gps.getaltitude();
         
-        latituteField.setText(String.valueOf(latitude));
-        longitudeField.setText(String.valueOf(longitude));
-        //speedField.setText(String.valueOf(speed));
-        //altitudeField.setText(String.valueOf(altitude));
-         
+        gpslocation = gps.getLocation();
+        
+        String strLongitude = gpslocation.convert(gpslocation.getLongitude(), gpslocation.FORMAT_SECONDS);
+        String strLatitude = gpslocation.convert(gpslocation.getLatitude(), gpslocation.FORMAT_SECONDS);
+        
+        latituteField.setText(strLatitude);
+        longitudeField.setText(strLongitude);
+        
         mylocation = new LatLng(latitude, longitude);
         mylocationmarker = map.addMarker(new MarkerOptions().position(mylocation).title("You are here!"));
-//        
-//        customlocationmarker = map.addMarker(new MarkerOptions()
-//		.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-//		.position(mylocation));
         
         Log.i("test", "Lat and Long  " + latitude + " " + longitude);
         
      // Move the camera instantly with a zoom of 15.
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(mylocation, 17));
 
-        // Zoom in, animating the camera.
-        //map.animateCamera(CameraUpdateFactory.zoomTo(17), 2000, null);
+     // Zoom in, animating the camera.
+     //map.animateCamera(CameraUpdateFactory.zoomTo(17), 2000, null);
         
-        // \n is for new line
-        //Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();    
-    }else{
+    }
+    else{
         // can't get location
         // GPS or Network is not enabled
         // Ask user to enable GPS/network in settings
@@ -118,26 +115,18 @@ public class MainActivity extends Activity implements LocationListener{
     //map listener
     
     //marker listener    
-    
-    	map.setOnMarkerClickListener(blueMarkerListener);
-    
+    map.setOnMarkerClickListener(blueMarkerListener);
     //marker listener
     
+    //timer task
     myTimer = new Timer();
-    myTimer.scheduleAtFixedRate(gps , 0, 600000); 
+    myTimer.scheduleAtFixedRate(gps , 0, 300000); 
+    //timer task
     
+    //ads
     AdView ad = (AdView) findViewById(R.id.adView);
     ad.loadAd(new AdRequest());
-    
-  
-//    Intent intent = new Intent(Intent.ACTION_VIEW);
-//    intent.setData(Uri.parse("geo:0,0?q=" + latitude + (", ")+ longitude ));
-//    try {
-//        startActivity(intent);
-//    } catch (Exception e) {
-//        e.printStackTrace();
-//    }
-    
+    //ads
   
   }
 
@@ -146,11 +135,23 @@ public class MainActivity extends Activity implements LocationListener{
   protected void onResume() {
     super.onResume();
     
+    gpslocation = gps.getLocation();
+    latitude = gps.getLatitude();
+    longitude = gps.getLongitude();
     //gps = new Gpstracker(MainActivity.this, this);
     map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
     
     mylocation = new LatLng(latitude, longitude);
     mylocationmarker.setPosition(mylocation);
+    
+    String strLongitude = gpslocation.convert(gpslocation.getLongitude(), gpslocation.FORMAT_SECONDS);
+    String strLatitude = gpslocation.convert(gpslocation.getLatitude(), gpslocation.FORMAT_SECONDS);
+    strLongitude = strLongitude.substring(0, strLongitude.indexOf('.'));
+    strLatitude = strLatitude.substring(0, strLatitude.indexOf('.'));
+    
+    
+    latituteField.setText(strLatitude);
+    longitudeField.setText(strLongitude);
     
     if (customlocationmarker == null)
     {
@@ -182,10 +183,13 @@ public void onLocationChanged(Location arg0) {
 	latitude = arg0.getLatitude();
     longitude = arg0.getLongitude();
 	
-	latituteField.setText(String.valueOf(arg0.getLatitude()));
-    longitudeField.setText(String.valueOf(arg0.getLongitude()));
-    //speedField.setText(String.valueOf(gps.getSpeed()));
-    //altitudeField.setText(String.valueOf(gps.getaltitude()));
+    String strLongitude = arg0.convert(arg0.getLongitude(), arg0.FORMAT_SECONDS);
+    String strLatitude = arg0.convert(arg0.getLatitude() , arg0.FORMAT_SECONDS);
+    strLongitude = strLongitude.substring(0, strLongitude.indexOf('.'));
+    strLatitude = strLatitude.substring(0, strLatitude.indexOf('.'));
+    
+    latituteField.setText(strLatitude);
+    longitudeField.setText(strLongitude);
     
     mylocation = new LatLng(latitude, longitude);
     mylocationmarker.setPosition(mylocation);
@@ -221,20 +225,27 @@ private OnClickListener ShareListener = new OnClickListener()
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
-			TextView latitudetext = (TextView)findViewById(R.id.TextView02);
-			TextView longitutetext = (TextView)findViewById(R.id.TextView04);
-           String strlatitude = latitudetext.getText().toString();
-           String strlongitute = longitutetext.getText().toString();
-           
-		   Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+			
+		  //gpslocation = gps.getLocation();
+	      latitude = gps.getLatitude();
+	      longitude = gps.getLongitude();
+			
+		  TextView latitudetext = (TextView)findViewById(R.id.TextView02);
+		  TextView longitutetext = (TextView)findViewById(R.id.TextView04);
+          String strlatitude = latitudetext.getText().toString();
+          String strlongitute = longitutetext.getText().toString();
+          //strlongitute = strlongitute.substring(0, strlongitute.indexOf('.'));
+          //strlatitude = strlatitude.substring(0, strlatitude.indexOf('.')); 
+          
+           Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
            emailIntent.setType("text/plain");
            if (customlocationmarker == null)
            {
-        	   sharetext = "I'm at this latitude " + strlatitude + " and this longitute " + strlongitute + " and this is link to the map: http://maps.google.com.au/maps?ll=" + strlatitude + "," + strlongitute;
+        	   sharetext = "I'm at this latitude " + strlatitude + " and this longitute " + strlongitute + " and this is link to the map: http://maps.google.com/maps?ll=" + latitude + "," + longitude;
            }
            else
            {
-        	   sharetext = "I want to share this location with you " + "http://maps.google.com.au/maps?ll=" +  pointt.latitude + "," + pointt.longitude;
+        	   sharetext = "I want to share this location with you " + "http://maps.google.com/maps?ll=" +  pointt.latitude + "," + pointt.longitude;
            }
            
         	   emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, sharetext);
@@ -271,6 +282,7 @@ private OnClickListener ShareListener = new OnClickListener()
 			if (customlocationmarker != null)
 			{
 		customlocationmarker.remove();
+		customlocationmarker = null;
 			}
 		customlocationmarker = map.addMarker(new MarkerOptions()
 		.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
@@ -293,6 +305,7 @@ private OnClickListener ShareListener = new OnClickListener()
 			if (customlocationmarker != null)
 		    {
 			customlocationmarker.remove();
+			customlocationmarker = null;
 		    }
 			return false;
 		}

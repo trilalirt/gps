@@ -45,7 +45,7 @@ public class Gpstracker extends TimerTask  {
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 1; // 10 meters
  
     // The minimum time between updates in milliseconds
-    private static final long MIN_TIME_BW_UPDATES = 1; // 1\4 minute
+    private static final long MIN_TIME_BW_UPDATES = 10000; // 1\4 minute
  
     // Declaring a Location Manager
     protected LocationManager locationManager;
@@ -90,31 +90,21 @@ public class Gpstracker extends TimerTask  {
                 			MIN_DISTANCE_CHANGE_FOR_UPDATES, 
                 			listener);
                 	
-                	
-                	
                 	Log.i("test", "Network");
                 	
-                    //Toast.makeText(getApplicationContext(),"network",Toast.LENGTH_LONG).show(); 
-                   
-                    
                     if (locationManager != null) {
                     	Log.i("gpstracker", "locationManager is not null");
                         location = locationManager
                                 .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-//                        if (location != null) {
-//                        	Log.i("gpstracker", "location is not null");
-//                        	latitude = location.getLatitude();
-//                            longitude = location.getLongitude();
-//                            speed = location.getSpeed();
-//                        }
+
                     }
                 }
                 // if GPS Enabled get lat/long using GPS Services
                 if (isGPSEnabled) {
                 	Log.i("test", " if GPS Enabled get lat/long using GPS Services");
-                	//Toast.makeText(getApplicationContext(),"gps -1",Toast.LENGTH_LONG).show();
+
                     if (location == null) {
-                    	//Toast.makeText(getApplicationContext(),"gps -2",Toast.LENGTH_LONG).show();
+
                         locationManager.requestLocationUpdates(
                                 LocationManager.GPS_PROVIDER,
                                 MIN_TIME_BW_UPDATES,
@@ -123,11 +113,6 @@ public class Gpstracker extends TimerTask  {
                         if (locationManager != null) {
                             location = locationManager
                                     .getLastKnownLocation(LocationManager.GPS_PROVIDER);
-//                            if (location != null) {
-//                                latitude = location.getLatitude();
-//                                longitude = location.getLongitude();
-//                                speed = location.getSpeed();
-//                            }
                         }
                     }
                 }
@@ -160,7 +145,7 @@ public class Gpstracker extends TimerTask  {
             
         }
         
-        // return latitude
+        
         return latitude;
         
     }
@@ -174,7 +159,7 @@ public class Gpstracker extends TimerTask  {
             
         }
          
-        // return longitude
+        
         return longitude;
     }
      
@@ -183,7 +168,7 @@ public class Gpstracker extends TimerTask  {
             speed = location.getSpeed();
             
         }
-        // return longitude
+        
         return speed;
     }
     
@@ -193,7 +178,7 @@ public class Gpstracker extends TimerTask  {
             
             
         }
-        // return longitude
+        
         return altitude;
     }
     
