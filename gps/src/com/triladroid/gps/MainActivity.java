@@ -35,6 +35,8 @@ public class MainActivity extends Activity implements LocationListener{
   private TextView longitudeField;
   private TextView altitudeField;
   private TextView speedField;
+  private TextView markerLat;
+  private TextView markerLng;
   LocationManager locationManager;
   private String provider;
   double latitude;
@@ -75,8 +77,8 @@ public class MainActivity extends Activity implements LocationListener{
         
         gpslocation = gps.getLocation();
         
-        String strLongitude = gpslocation.convert(gpslocation.getLongitude(), gpslocation.FORMAT_SECONDS);
-        String strLatitude = gpslocation.convert(gpslocation.getLatitude(), gpslocation.FORMAT_SECONDS);
+        String strLongitude = "Longitude: " + MyConvert(gpslocation.getLongitude());
+        String strLatitude = "Latitude: " + MyConvert(gpslocation.getLatitude());
         
         latituteField.setText(strLatitude);
         longitudeField.setText(strLongitude);
@@ -144,11 +146,8 @@ public class MainActivity extends Activity implements LocationListener{
     mylocation = new LatLng(latitude, longitude);
     mylocationmarker.setPosition(mylocation);
     
-    String strLongitude = gpslocation.convert(gpslocation.getLongitude(), gpslocation.FORMAT_SECONDS);
-    String strLatitude = gpslocation.convert(gpslocation.getLatitude(), gpslocation.FORMAT_SECONDS);
-    strLongitude = strLongitude.substring(0, strLongitude.indexOf('.'));
-    strLatitude = strLatitude.substring(0, strLatitude.indexOf('.'));
-    
+    String strLongitude = "Longitude: " + MyConvert(gpslocation.getLongitude());
+    String strLatitude = "Latitude: " + MyConvert(gpslocation.getLatitude());
     
     latituteField.setText(strLatitude);
     longitudeField.setText(strLongitude);
@@ -183,10 +182,8 @@ public void onLocationChanged(Location arg0) {
 	latitude = arg0.getLatitude();
     longitude = arg0.getLongitude();
 	
-    String strLongitude = arg0.convert(arg0.getLongitude(), arg0.FORMAT_SECONDS);
-    String strLatitude = arg0.convert(arg0.getLatitude() , arg0.FORMAT_SECONDS);
-    strLongitude = strLongitude.substring(0, strLongitude.indexOf('.'));
-    strLatitude = strLatitude.substring(0, strLatitude.indexOf('.'));
+    String strLongitude = "Longitude: " + MyConvert(arg0.getLongitude());
+    String strLatitude = "Latitude: " + MyConvert(arg0.getLatitude());
     
     latituteField.setText(strLatitude);
     longitudeField.setText(strLongitude);
@@ -241,6 +238,8 @@ private OnClickListener ShareListener = new OnClickListener()
            emailIntent.setType("text/plain");
            if (customlocationmarker == null)
            {
+        	   
+        	   
         	   sharetext = "I'm at this latitude " + strlatitude + " and this longitute " + strlongitute + " and this is link to the map: http://maps.google.com/maps?ll=" + latitude + "," + longitude;
            }
            else
@@ -265,6 +264,13 @@ private OnClickListener ShareListener = new OnClickListener()
 			{
 				customlocationmarker.remove();
 				customlocationmarker = null;
+				markerLat = (TextView) findViewById(R.id.TextView05);
+				markerLat.setVisibility(View.GONE);
+				markerLng = (TextView) findViewById(R.id.TextView06);
+				markerLng.setVisibility(View.GONE);
+				
+				Button getButton = (Button)findViewById(R.id.sh);
+				getButton.setText("Share your location");
 			}
 			mylocation = new LatLng(latitude, longitude);
 		    mylocationmarker.setPosition(mylocation);
@@ -283,6 +289,8 @@ private OnClickListener ShareListener = new OnClickListener()
 			{
 		customlocationmarker.remove();
 		customlocationmarker = null;
+		
+		
 			}
 		customlocationmarker = map.addMarker(new MarkerOptions()
 		.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
@@ -291,7 +299,22 @@ private OnClickListener ShareListener = new OnClickListener()
 		
 		customlocationmarker.setPosition(point);
 		pointt = point;
-			
+		
+		String markerLatText = "Marker Latiude: " + MyConvert(pointt.latitude);
+        String markerLngText = "Marker Longitude: " + MyConvert(pointt.longitude);
+		
+		markerLat = (TextView) findViewById(R.id.TextView05);
+		markerLat.setText(markerLatText);
+		markerLat.setVisibility(View.VISIBLE);
+		
+		markerLng = (TextView) findViewById(R.id.TextView06);
+		markerLng.setText(markerLngText);
+		markerLng.setVisibility(View.VISIBLE);
+		
+		Button getButton = (Button)findViewById(R.id.sh);
+		getButton.setText("Share blue marker location");
+		
+		
 		}
 	
 	};
@@ -306,10 +329,32 @@ private OnClickListener ShareListener = new OnClickListener()
 		    {
 			customlocationmarker.remove();
 			customlocationmarker = null;
+			
+			Button getButton = (Button)findViewById(R.id.sh);
+			getButton.setText("Share your location");
+			
+			markerLat = (TextView) findViewById(R.id.TextView05);
+			markerLat.setVisibility(View.GONE);
+			
+			markerLng = (TextView) findViewById(R.id.TextView06);
+			markerLng.setVisibility(View.GONE);
 		    }
 			return false;
 		}
 		
+		
+	};
+	
+	private String MyConvert(double value)
+	{
+		String converttosec = Location.convert(value , Location.FORMAT_SECONDS);
+		
+		 if (converttosec.indexOf('.') != -1)
+		    {
+			 converttosec = converttosec.substring(0, converttosec.indexOf('.'));
+		    }
+
+		 return converttosec;
 		
 	};
 	

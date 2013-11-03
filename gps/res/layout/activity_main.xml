@@ -18,7 +18,7 @@
          
        
  
- 		
+                 
          
          
          <RelativeLayout
@@ -50,70 +50,88 @@
              android:layout_height="wrap_content" 
              android:layout_alignParentTop="false" 
              android:layout_centerHorizontal="true" 
-             android:text="Share" 
+             android:text="Share your location" 
              android:textStyle="normal|bold" 
              android:textSize="20dp"
               android:layout_below="@+id/adView"
              
                />
- 		 
- 		  <TextView
- 		      android:id="@+id/TextView03"
- 		      android:layout_width="wrap_content"
- 		      android:layout_height="wrap_content"
- 		      android:layout_alignParentBottom="true"
- 		      android:layout_alignParentLeft="true"
- 		      android:layout_marginLeft="10dip"
- 		      android:layout_marginBottom="30dip"
- 		      android:layout_marginRight="5dip"
- 		      android:text="Longitute: "
- 		      android:textColor="#424242"
- 		      android:textSize="20dip" />
+                  
+                   
+                <TextView
+                       android:id="@+id/TextView07"
+                       android:layout_width="wrap_content"
+                       android:layout_height="30dip"
+                       android:layout_alignParentLeft="true"
+                       android:layout_alignParentBottom="true"
+                       android:layout_marginLeft="10dip"
+                       android:layout_marginRight="5dip"
+                       android:textColor="#424242"
+                       android:textSize="20dip" />      
+               
+                     <TextView
+                       android:id="@+id/TextView06"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_alignParentLeft="true"
+                       android:layout_above="@+id/TextView07"
+                       android:layout_marginLeft="10dip"
+                       android:layout_marginRight="5dip"
+                       android:visibility="gone"
+                       android:textColor="#424242"
+                       android:textSize="20dip" />
+                    
+                    <TextView
+                       android:id="@+id/TextView05"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_alignParentLeft="true"
+                       android:layout_marginLeft="10dip"
+                       android:layout_marginBottom="3dip"
+                       android:layout_marginRight="5dip"
+                       android:layout_above="@+id/TextView06"
+                       android:visibility="gone"
+                       android:textColor="#424242"
+                       android:textSize="20dip" />
+                   
+                   
+                   
 
         <TextView
             android:id="@+id/TextView04"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@+id/TextView03"
-            android:layout_marginBottom="30dip"
+            android:layout_alignParentLeft="true"
+            android:layout_marginBottom="3dip"
+            android:layout_marginLeft="10dip"
+            android:layout_above="@+id/TextView05"
             android:text="unknown"
             android:textColor="#424242"
             android:textSize="20dip" />
 
-        <TextView
-            android:id="@+id/TextView01"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/TextView03"
-            android:layout_alignLeft="@+id/TextView03"
-            android:layout_marginBottom="3dip"
-            android:text="Latitude: "
-            android:textColor="#424242"
-            android:textSize="20dip" />
+       
 
         <TextView
             android:id="@+id/TextView02"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/TextView01"
-            android:layout_alignBottom="@+id/TextView01"
-            android:layout_toRightOf="@+id/TextView01"
             android:layout_marginBottom="3dip"
+            android:layout_alignParentLeft="true"
+            android:layout_above="@+id/TextView04"
+            android:layout_marginLeft="10dip"
             android:text="unknown"
             android:textColor="#424242"
             android:textSize="20dip" />
         
         <Button            
             android:id="@+id/location"
-        	android:layout_width="wrap_content"
+                android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/TextView01"
+            android:layout_alignParentLeft="true"
+            android:layout_above="@+id/TextView02"
             android:background="@drawable/custombutton"
             android:layout_marginBottom="3dip"
             android:layout_marginLeft="5dip"
-            
-            
             />
 
     </RelativeLayout>
