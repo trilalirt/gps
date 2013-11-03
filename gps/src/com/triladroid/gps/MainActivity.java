@@ -50,7 +50,8 @@ public class MainActivity extends Activity implements LocationListener{
   private Timer myTimer;
   private String sharetext;
   private LatLng pointt;
-  private Location gpslocation;
+  
+  //private Location gpslocation;
 
   
 /** Called when the activity is first created. */
@@ -67,7 +68,7 @@ public class MainActivity extends Activity implements LocationListener{
     gps = new Gpstracker(MainActivity.this, this);
     
     map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
-    
+    /*
     if(gps.canGetLocation()){
     	//Toast.makeText(getApplicationContext(),"can get location",Toast.LENGTH_LONG).show();
         latitude = gps.getLatitude();
@@ -75,10 +76,10 @@ public class MainActivity extends Activity implements LocationListener{
         double speed = gps.getSpeed();
         double altitude = gps.getaltitude();
         
-        gpslocation = gps.getLocation();
+        //gpslocation = gps.getLocation();
         
-        String strLongitude = "Longitude: " + MyConvert(gpslocation.getLongitude());
-        String strLatitude = "Latitude: " + MyConvert(gpslocation.getLatitude());
+        String strLongitude = "Longitude: " + MyConvert(longitude);
+        String strLatitude = "Latitude: " + MyConvert(latitude);
         
         latituteField.setText(strLatitude);
         longitudeField.setText(strLongitude);
@@ -100,7 +101,10 @@ public class MainActivity extends Activity implements LocationListener{
         // GPS or Network is not enabled
         // Ask user to enable GPS/network in settings
         gps.showSettingsAlert();
-    }
+    }*/
+    
+    //mylocation = new LatLng(0,0);
+    mylocationmarker = map.addMarker(new MarkerOptions().position(new LatLng(0,0)).title("You are here!"));
      
   //share
     Button getButton = (Button)findViewById(R.id.sh);
@@ -136,8 +140,8 @@ public class MainActivity extends Activity implements LocationListener{
   @Override
   protected void onResume() {
     super.onResume();
-    
-    gpslocation = gps.getLocation();
+    /*
+    Location gpslocation = gps.getLocation();
     latitude = gps.getLatitude();
     longitude = gps.getLongitude();
     //gps = new Gpstracker(MainActivity.this, this);
@@ -146,15 +150,24 @@ public class MainActivity extends Activity implements LocationListener{
     mylocation = new LatLng(latitude, longitude);
     mylocationmarker.setPosition(mylocation);
     
+    if (gpslocation == null)
+    {
+    Log.i("test", "location is null "  );
+    }
+    
     String strLongitude = "Longitude: " + MyConvert(gpslocation.getLongitude());
     String strLatitude = "Latitude: " + MyConvert(gpslocation.getLatitude());
     
     latituteField.setText(strLatitude);
     longitudeField.setText(strLongitude);
+    */
+    gps.register();
     
-    if (customlocationmarker == null)
+    
+    
+    if (customlocationmarker == null && mylocation != null)
     {
-    map.moveCamera(CameraUpdateFactory.newLatLngZoom(mylocation, 17));
+    	map.moveCamera(CameraUpdateFactory.newLatLngZoom(mylocation, 17));
     }
     
   }
@@ -163,7 +176,8 @@ public class MainActivity extends Activity implements LocationListener{
   @Override
   protected void onPause() {
     super.onPause();
-    gps.stopUsingGPS();
+    //gps.stopUsingGPS();
+    gps.remove();
   }
   
   @Override
@@ -179,6 +193,12 @@ public void onLocationChanged(Location arg0) {
 	// TODO Auto-generated method stub
 	//gps.getLocation();
 	
+	LatLng mylatlang = new LatLng(arg0.getLatitude(), arg0.getLongitude());
+	if (mylocation == null)
+	{
+		map.moveCamera(CameraUpdateFactory.newLatLngZoom(mylatlang, 17));
+	}
+	
 	latitude = arg0.getLatitude();
     longitude = arg0.getLongitude();
 	
@@ -191,6 +211,7 @@ public void onLocationChanged(Location arg0) {
     mylocation = new LatLng(latitude, longitude);
     mylocationmarker.setPosition(mylocation);
     
+    //Toast.makeText(getApplicationContext(),"ONLOCATIONCHANGED",Toast.LENGTH_LONG).show();
     //mylocationmarker = map.addMarker(new MarkerOptions().position(mylocation).title("You are here! 2"));
     
  // Move the camera instantly with a zoom of 15.
@@ -202,13 +223,15 @@ public void onLocationChanged(Location arg0) {
 @Override
 public void onProviderDisabled(String arg0) {
 	// TODO Auto-generated method stub
-	
+	gps.remove();
+	gps.register();
 }
 
 @Override
 public void onProviderEnabled(String arg0) {
 	// TODO Auto-generated method stub
-	
+	gps.remove();
+	gps.register();
 }
 
 @Override
@@ -224,8 +247,8 @@ private OnClickListener ShareListener = new OnClickListener()
 			// TODO Auto-generated method stub
 			
 		  //gpslocation = gps.getLocation();
-	      latitude = gps.getLatitude();
-	      longitude = gps.getLongitude();
+	      //latitude = gps.getLatitude();
+	      //longitude = gps.getLongitude();
 			
 		  TextView latitudetext = (TextView)findViewById(R.id.TextView02);
 		  TextView longitutetext = (TextView)findViewById(R.id.TextView04);
