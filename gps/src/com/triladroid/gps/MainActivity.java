@@ -45,6 +45,7 @@ public class MainActivity extends Activity implements LocationListener{
   Gpstracker gps;
   private GoogleMap map;
   private LatLng mylocation;
+  private Location mylocationlocation;
   private Marker mylocationmarker; 
   private Marker customlocationmarker;
   private Timer myTimer;
@@ -193,6 +194,10 @@ public void onLocationChanged(Location arg0) {
 	// TODO Auto-generated method stub
 	//gps.getLocation();
 	
+	
+	if (getBetterLocation(arg0, mylocationlocation) == arg0)
+	{
+	
 	LatLng mylatlang = new LatLng(arg0.getLatitude(), arg0.getLongitude());
 	if (mylocation == null)
 	{
@@ -201,6 +206,7 @@ public void onLocationChanged(Location arg0) {
 	
 	latitude = arg0.getLatitude();
     longitude = arg0.getLongitude();
+    mylocationlocation = arg0;
 	
     String strLongitude = "Longitude: " + MyConvert(arg0.getLongitude());
     String strLatitude = "Latitude: " + MyConvert(arg0.getLatitude());
@@ -216,9 +222,54 @@ public void onLocationChanged(Location arg0) {
     
  // Move the camera instantly with a zoom of 15.
    // map.moveCamera(CameraUpdateFactory.newLatLngZoom(mylocation, 17));
-
+	}
 	
 }
+
+
+protected Location getBetterLocation(Location newLocation, Location currentBestLocation) {
+    if (currentBestLocation == null) {
+        // A new location is always better than no location
+        return newLocation;
+    }
+
+    // Check whether the new location fix is newer or older
+    long timeDelta = newLocation.getTime() - currentBestLocation.getTime();
+    boolean isSignificantlyNewer = timeDelta > 30000;
+    boolean isSignificantlyOlder = timeDelta < -30000;
+    boolean isNewer = timeDelta > 0;
+
+    // If it's been more than two minutes since the current location, use the new location
+    // because the user has likely moved.
+    if (isSignificantlyNewer) {
+        return newLocation;
+    // If the new location is more than two minutes older, it must be worse
+    } else if (isSignificantlyOlder) {
+        return currentBestLocation;
+    }
+
+    // Check whether the new location fix is more or less accurate
+    int accuracyDelta = (int) (newLocation.getAccuracy() - currentBestLocation.getAccuracy());
+    boolean isLessAccurate = accuracyDelta > 0;
+    boolean isMoreAccurate = accuracyDelta < 0;
+    boolean isSignificantlyLessAccurate = accuracyDelta > 200;
+
+    // Check if the old and new location are from the same provider
+    //boolean isFromSameProvider = isSameProvider(newLocation.getProvider(),currentBestLocation.getProvider());
+
+    boolean isFromSameProvider = newLocation.getProvider() == currentBestLocation.getProvider();
+    
+    // Determine location quality using a combination of timeliness and accuracy
+    if (isMoreAccurate) {
+        return newLocation;
+    } else if (isNewer && !isLessAccurate) {
+        return newLocation;
+    } else if (isNewer && !isSignificantlyLessAccurate && isFromSameProvider) {
+        return newLocation;
+    }
+    return currentBestLocation;
+}
+
 
 @Override
 public void onProviderDisabled(String arg0) {
