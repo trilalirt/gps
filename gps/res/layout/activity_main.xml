@@ -12,8 +12,10 @@
     <fragment
         android:id="@+id/map"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        class="com.google.android.gms.maps.MapFragment" >
+        android:layout_height="fill_parent"
+        class="com.google.android.gms.maps.MapFragment"
+        
+         >
     
          
        
@@ -29,52 +31,49 @@
         android:orientation="horizontal" >
         
     
-     <com.google.ads.AdView
-     android:id="@+id/adView"
-     android:layout_width="wrap_content"
-     android:layout_height="wrap_content"
-     android:layout_alignParentTop="true"
-     ads:adSize="BANNER"
-     ads:adUnitId="a15269970578fef"
-     ads:loadAdsOnCreate="true"
-     android:gravity="center" 
-     android:layout_centerHorizontal="true"
-     
-     >
-
-</com.google.ads.AdView> 
-         
+   
 
                <Button android:id="@+id/sh" 
              android:layout_width="fill_parent" 
-             android:layout_height="wrap_content" 
-             android:layout_alignParentTop="false" 
-             android:layout_centerHorizontal="true" 
+             android:layout_height="55dp" 
+             
              android:text="Share your location" 
              android:textStyle="normal|bold" 
              android:textSize="20dp"
-              android:layout_below="@+id/adView"
+             android:textAlignment="center"
+             
+     		 android:layout_centerHorizontal="true"
+     		 android:layout_alignParentBottom="true"
+     		 
+              
              
                />
                   
-                   
-                <TextView
-                       android:id="@+id/TextView07"
-                       android:layout_width="wrap_content"
-                       android:layout_height="30dip"
-                       android:layout_alignParentLeft="true"
-                       android:layout_alignParentBottom="true"
-                       android:layout_marginLeft="10dip"
-                       android:layout_marginRight="5dip"
-                       android:textColor="#424242"
-                       android:textSize="20dip" />      
+                <com.google.ads.AdView
+     android:id="@+id/adView"
+     android:layout_width="wrap_content" 
+     android:layout_height="wrap_content" 
+     android:layout_alignParentTop="true" 
+     android:layout_centerHorizontal="true" 
+     
+     
+     ads:adSize="BANNER"
+     ads:adUnitId="a15269970578fef"
+     ads:loadAdsOnCreate="true"
+     
+     >
+
+</com.google.ads.AdView>  
+              
+               
+                 
                
                      <TextView
                        android:id="@+id/TextView06"
                        android:layout_width="wrap_content"
                        android:layout_height="wrap_content"
                        android:layout_alignParentLeft="true"
-                       android:layout_above="@+id/TextView07"
+                       android:layout_above="@+id/sh"
                        android:layout_marginLeft="10dip"
                        android:layout_marginRight="5dip"
                        android:visibility="gone"
@@ -141,6 +140,6 @@
   
   </fragment> 
   
-    
+   
 
 </RelativeLayout> 

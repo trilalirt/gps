@@ -69,6 +69,7 @@ public class MainActivity extends Activity implements LocationListener{
     gps = new Gpstracker(MainActivity.this, this);
     
     map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+    map.getUiSettings().setZoomControlsEnabled(false);
     /*
     if(gps.canGetLocation()){
     	//Toast.makeText(getApplicationContext(),"can get location",Toast.LENGTH_LONG).show();
